@@ -7,10 +7,13 @@ discount = 0.3
 actions = World.actions
 states = []
 Q = {}
+# 通过两个循环，生成了所有可能的状态，并将这些状态添加到states列表中。
 for i in range(World.x):
     for j in range(World.y):
         states.append((i, j))
 
+# 对于每个状态，创建了一个临时字典temp，并将每个动作的初始Q值设置为0.1。
+# 然后，通过World模块的set_cell_score函数，将状态和对应动作的Q值存储在游戏环境中，并将temp字典存储在Q字典中。
 for state in states:
     temp = {}
     for action in actions:
@@ -23,7 +26,9 @@ for (i, j, c, w) in World.specials:
         Q[(i, j)][action] = w
         World.set_cell_score((i, j), action, w)
 
-
+# 定义了一个名为do_action的函数，用于执行给定的动作。
+# 它首先获取当前的状态s和得分r。根据给定的动作，调用World模块的try_move函数来移动棋子。
+# 然后，获取移动后的状态s2和更新后的得分r。最后，返回执行动作前后的状态、动作、奖励和下一个状态。
 def do_action(action):
     s = World.player
     r = -World.score
@@ -41,7 +46,8 @@ def do_action(action):
     r += World.score
     return s, action, r, s2
 
-
+# 定义了一个名为max_Q的函数，用于在给定状态s下找到具有最大Q值的动作。
+# 它遍历状态s对应的Q值字典，并返回具有最大Q值的动作和对应的Q值。
 def max_Q(s):
     val = None
     act = None
@@ -51,7 +57,8 @@ def max_Q(s):
             act = a
     return act, val
 
-
+# 定义了一个名为inc_Q的函数，用于更新Q值。
+# 它根据给定的状态s、动作a、学习率alpha和增量inc，更新Q值表中对应的Q值，并将更新后的Q值存储在游戏环境中。
 def inc_Q(s, a, alpha, inc):
     Q[s][a] *= 1 - alpha
     Q[s][a] += alpha * inc
