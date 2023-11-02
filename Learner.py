@@ -1,3 +1,4 @@
+# coding=utf-8
 __author__ = 'philippe'
 import World
 import threading
@@ -34,16 +35,21 @@ def do_action(action):
     r = -World.score
     if action == actions[0]:
         World.try_move(0, -1)
+        R = World.score
     elif action == actions[1]:
         World.try_move(0, 1)
+        R = World.score
     elif action == actions[2]:
         World.try_move(-1, 0)
+        R = World.score
     elif action == actions[3]:
         World.try_move(1, 0)
+        # R = World.score
+        R = 1e6 # dummy strategy
     else:
         return
     s2 = World.player
-    r += World.score
+    r += R
     return s, action, r, s2
 
 # 定义了一个名为max_Q的函数，用于在给定状态s下找到具有最大Q值的动作。
